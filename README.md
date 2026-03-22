@@ -9,14 +9,14 @@ A high-performance, polished administrative interface designed for Wikimedia Fou
 
 ---
 
-## 📖 Project Description
+##  Project Description
 The **Programs & Events Staff Dashboard** is a specialized tool under the GSoC 2026 proposal to modernize administrative workflows within the Wikimedia ecosystem. It replaces traditional, manual data requests with a self-service, real-time platform where staff can monitor the health of global initiatives (like Education programs, Edit-a-thons, and Contests) across all wiki languages.
 
 The project emphasizes **Data Democratization** and **Operational Efficiency**, ensuring that decision-makers have immediate access to both high-level KPIs and granular CSV-ready data.
 
 ---
 
-## 🎯 Project Motivation
+##  Project Motivation
 As the Wikimedia movement grows, managing the sheer volume of global programs requires a centralized, secure, and user-friendly tool. This proposal addresses key pain points:
 - **Centralized Health Monitoring**: Instantly identify if global programs are growing or shrinking.
 - **Self-Service Data Export**: Remove the bottleneck of manual DB queries by providing an asynchronous CSV generation system.
@@ -24,32 +24,32 @@ As the Wikimedia movement grows, managing the sheer volume of global programs re
 
 ---
 
-## 🏗️ System Architecture (High Visibility)
+##  System Architecture (High Visibility)
 
 The project follows a modular, state-driven React architecture designed for maximum clarity and performance.
 
 ```mermaid
 graph TD
     %% Main Entry
-    Dashboard["🖥️ STAFF DASHBOARD (Core Container)"]
+    Dashboard[" STAFF DASHBOARD (Core Container)"]
     
     style Dashboard fill:#3a6fa8,stroke:#1a1a1a,stroke-width:4px,color:#fff,font-weight:bold
 
     %% User Interaction Subgraph
     subgraph "Control & Navigation Layer"
-        Filters["🔍 PROGRAM FILTERS"]
-        Workflow["📋 PROJECT WORKFLOW"]
+        Filters[" PROGRAM FILTERS"]
+        Workflow[" PROJECT WORKFLOW"]
     end
 
     %% Data Visualization Subgraph
     subgraph "Analytics & Presentation Layer"
-        Metrics["📊 KEY METRIC CARDS"]
-        Charts["📈 TREND ANALYSIS CHARTS"]
+        Metrics[" KEY METRIC CARDS"]
+        Charts[" TREND ANALYSIS CHARTS"]
     end
 
     %% Background Logic Subgraph
     subgraph "Infrastructure & Data Services"
-        Export["📥 CSV EXPORT SERVICE"]
+        Export[" CSV EXPORT SERVICE"]
     end
 
     %% Logic Connections
@@ -80,26 +80,26 @@ A simple, clean, and reliable 4-step process for staff members to manage program
 
 ---
 
-## ✨ Key Features Breakdown
+##  Key Features Breakdown
 
-### 📊 KPI Monitoring Grid
+###  KPI Monitoring Grid
 - **Real-time Overview**: 6 high-visibility cards showing the state of the movement.
 - **Retention Analytics**: Specialized tracking for "Editor Retention Rate" to measure long-term program impact.
 - **Growth Metrics**: Active tracking of "New Programs This Month" to monitor initiative momentum.
 
-### 📈 Data Visualizations
+###  Data Visualizations
 - **Categorical Analysis**: Bar charts showing program distribution by type.
 - **Temporal Trends**: Line charts visualizing Monthly Active Editors over a 12-month period.
 - **Linguistic Insights**: Horizontal bar charts identifying the top wiki languages by program count.
 
-### 📥 Enterprise-Grade Export
+###  Enterprise-Grade Export
 - **Background Processing**: Jobs are queued and processed asynchronously.
 - **Secure Delivery**: Email-based download links ensure data is only accessible to the requester.
 - **Configurable Filters**: Exports respect all dashboard filters (Date, Language, Type).
 
 ---
 
-## 🛠️ Tech Stack & Dependencies
+##  Tech Stack & Dependencies
 - **Frontend**: [React 18+](https://react.dev/) — Component-based architecture for a responsive UI.
 - **Visuals**: [Recharts](https://recharts.org/) — Lightweight, SVG-based charting library for neat data rendering.
 - **Build Tool**: [Vite](https://vitejs.dev/) — Fast, modern development server and bundler.
@@ -107,7 +107,7 @@ A simple, clean, and reliable 4-step process for staff members to manage program
 
 ---
 
-## 🚀 Getting Started (Run the Project)
+##  Getting Started (Run the Project)
 
 Follow these steps to set up the development environment on your local machine.
 
@@ -139,19 +139,19 @@ npm run build
 
 ---
 
-## 📁 Repository Directory Structure
+##  Repository Directory Structure
 
 A clean and organized file system designed for easy contribution and audit.
 
 ```text
 /
 ├── src/
-│   ├── components/       # Pure React UI components
-│   │   ├── StaffDashboard.jsx   # Main Application Container
-│   │   ├── DashboardFilters.jsx # Filtering Interface
-│   │   ├── MetricsGrid.jsx     # KPI Cards
-│   │   ├── DashboardCharts.jsx  # Visualization Modules
-│   │   └── ExportData.jsx      # CSV Export Logic
+│   ├── components/               # Pure React UI components
+│   │   ├── StaffDashboard.jsx    # Main Application Container
+│   │   ├── DashboardFilters.jsx  # Filtering Interface
+│   │   ├── MetricsGrid.jsx       # KPI Cards
+│   │   ├── DashboardCharts.jsx   # Visualization Modules
+│   │   └── ExportData.jsx        # CSV Export Logic
 │   ├── styles/           # Global and component-specific styling
 │   ├── App.jsx           # Root Component
 │   └── main.jsx          # Entry Point
@@ -161,7 +161,7 @@ A clean and organized file system designed for easy contribution and audit.
 
 ---
 
-## 🛣️ Future Enhancements (GSoC Roadmap)
+##  Future Enhancements (GSoC Roadmap)
 - **Advanced Search**: Deep search for specific program names across the entire global database.
 - **Real-time Collaboration**: Live WebSockets to see when other staff members are updating program data.
 - **Staff Audit Logs**: Internal tracking of metrics changes and export requests for transparency and compliance.
