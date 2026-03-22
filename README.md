@@ -1,4 +1,4 @@
-# Google Summer of Code 2026 Proposal — Wikimedia Foundation
+# Google Summer of Code 2026 Proposal - Wikimedia Foundation
 
 # Programs & Events Dashbaord System Wide Metrics & Data Download 
 
