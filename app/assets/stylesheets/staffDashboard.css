@@ -1,0 +1,431 @@
+/* staffDashboard.css
+   Staff Dashboard — Programs & Events Dashboard
+   Clean, minimal styling that matches the WikiEduDashboard aesthetic.
+   Color references:
+     Primary blue : #3a6fa8
+     Hover blue   : #2d5a8e
+     Page bg      : #f5f7fa
+     Card bg      : #ffffff
+     Border       : #c5d5ea
+     Text dark    : #1a1a1a
+     Text mid     : #3a3a3a
+     Text muted   : #888888
+     Error red    : #c0392b
+     Success green: #27ae60
+*/
+
+/* ─── Reset / Base ───────────────────────────────────────────── */
+.staff-dashboard *,
+.staff-dashboard *::before,
+.staff-dashboard *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.staff-dashboard {
+  font-family: Arial, sans-serif;
+  background: #f5f7fa;
+  color: #1a1a1a;
+  min-height: 100vh;
+  padding: 0;
+}
+
+/* ─── Page Header ────────────────────────────────────────────── */
+.staff-dashboard__header {
+  background: #ffffff;
+  border-bottom: 1px solid #c5d5ea;
+  padding: 20px 32px;
+}
+
+.staff-dashboard__title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.staff-dashboard__subtitle {
+  font-size: 14px;
+  color: #888888;
+  margin-top: 4px;
+}
+
+/* ─── Page Body ──────────────────────────────────────────────── */
+.staff-dashboard__body {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ─── Section Wrapper (white card area) ─────────────────────── */
+.staff-section {
+  background: #ffffff;
+  border: 1px solid #c5d5ea;
+  border-radius: 4px;
+  padding: 20px 24px;
+}
+
+.staff-section__title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e8eef5;
+}
+
+/* ─── Filter Panel ───────────────────────────────────────────── */
+.filter-panel__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-end;
+}
+
+.filter-panel__group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 160px;
+}
+
+.filter-panel__label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #3a3a3a;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.filter-panel__input,
+.filter-panel__select {
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  color: #1a1a1a;
+  background: #ffffff;
+  border: 1px solid #c5d5ea;
+  border-radius: 4px;
+  padding: 7px 10px;
+  outline: none;
+  transition: border-color 0.15s;
+  min-width: 140px;
+}
+
+.filter-panel__input:focus,
+.filter-panel__select:focus {
+  border-color: #3a6fa8;
+}
+
+.filter-panel__date-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.filter-panel__date-sep {
+  font-size: 12px;
+  color: #888888;
+}
+
+.filter-panel__actions {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  margin-left: auto;
+}
+
+/* ─── Buttons ────────────────────────────────────────────────── */
+.btn {
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 18px;
+  cursor: pointer;
+  transition: background-color 0.15s, opacity 0.15s;
+  line-height: 1.4;
+}
+
+.btn--primary {
+  background: #3a6fa8;
+  color: #ffffff;
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: #2d5a8e;
+}
+
+.btn--secondary {
+  background: #e8eef5;
+  color: #3a3a3a;
+}
+
+.btn--secondary:hover:not(:disabled) {
+  background: #d4dfe9;
+}
+
+.btn--lg {
+  padding: 10px 24px;
+  font-size: 14px;
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ─── Metrics Cards ──────────────────────────────────────────── */
+.metrics-cards__grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 1100px) {
+  .metrics-cards__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .metrics-cards__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.metric-card {
+  background: #ffffff;
+  border: 1px solid #c5d5ea;
+  border-radius: 4px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.metric-card__title {
+  font-size: 12px;
+  color: #888888;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 8px;
+}
+
+.metric-card__value {
+  font-size: 26px;
+  font-weight: 700;
+  color: #3a6fa8;
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+
+.metric-card__subtitle {
+  font-size: 11px;
+  color: #888888;
+}
+
+/* ─── Skeleton Loading ───────────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(90deg, #e8eef5 25%, #d4dfe9 50%, #e8eef5 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s infinite;
+  border-radius: 3px;
+}
+
+@keyframes skeleton-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton--card {
+  height: 90px;
+  border-radius: 4px;
+}
+
+.skeleton--chart {
+  height: 260px;
+  border-radius: 4px;
+  margin-bottom: 28px;
+}
+
+.skeleton--text {
+  height: 14px;
+  border-radius: 3px;
+  margin-bottom: 8px;
+}
+
+/* ─── Error & Empty States ───────────────────────────────────── */
+.state-box {
+  padding: 20px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.state-box--error {
+  border: 1px solid #e8b4b8;
+  background: #fdf3f3;
+  color: #c0392b;
+}
+
+.state-box--empty {
+  border: 1px solid #c5d5ea;
+  background: #f5f7fa;
+  color: #888888;
+}
+
+.state-box__text {
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+/* ─── Charts Section ─────────────────────────────────────────── */
+.charts-section {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.chart-block {
+  background: #ffffff;
+  border: 1px solid #c5d5ea;
+  border-radius: 4px;
+  padding: 20px 24px;
+}
+
+.chart-block__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 16px;
+}
+
+.chart-responsive-wrapper {
+  width: 100%;
+}
+
+/* ─── Export Panel ───────────────────────────────────────────── */
+.export-panel__description {
+  font-size: 14px;
+  color: #3a3a3a;
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.export-panel__fields-box {
+  background: #f5f7fa;
+  border: 1px solid #c5d5ea;
+  border-radius: 4px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+}
+
+.export-panel__fields-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #888888;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+
+.export-panel__fields-text {
+  font-size: 12px;
+  color: #3a3a3a;
+  line-height: 1.6;
+}
+
+.export-panel__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.export-panel__rate-notice {
+  font-size: 11px;
+  color: #888888;
+  margin-top: 4px;
+}
+
+/* ─── Job Status Area ────────────────────────────────────────── */
+.job-status {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 4px;
+  border: 1px solid #c5d5ea;
+  background: #f5f7fa;
+  margin-top: 16px;
+  max-width: 480px;
+}
+
+.job-status--queued    { border-color: #a0aec0; background: #f7f7f7; }
+.job-status--processing{ border-color: #3a6fa8; background: #eef4fb; }
+.job-status--complete  { border-color: #27ae60; background: #f0fbf4; }
+.job-status--failed    { border-color: #c0392b; background: #fdf3f3; }
+
+.job-status__icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.job-status__text {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.job-status--queued    .job-status__text { color: #555555; }
+.job-status--processing .job-status__text { color: #3a6fa8; }
+.job-status--complete  .job-status__text { color: #27ae60; }
+.job-status--failed    .job-status__text { color: #c0392b; }
+
+/* ─── Spinner ────────────────────────────────────────────────── */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+.spinner--grey  { color: #a0aec0; }
+.spinner--blue  { color: #3a6fa8; }
+
+/* ─── Responsive Tweaks ──────────────────────────────────────── */
+@media (max-width: 768px) {
+  .staff-dashboard__header {
+    padding: 16px 16px;
+  }
+  .staff-dashboard__body {
+    padding: 16px 12px;
+  }
+  .staff-section {
+    padding: 16px 14px;
+  }
+  .filter-panel__grid {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .filter-panel__actions {
+    margin-left: 0;
+    width: 100%;
+  }
+  .filter-panel__actions .btn {
+    flex: 1;
+    text-align: center;
+  }
+}

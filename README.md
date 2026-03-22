@@ -1,154 +1,73 @@
-# Programs-Events-Dashboard-System-Wide-Metrics-Data-Downloads
-This project improves the Programs &amp; Events Dashboard by adding a secure staff dashboard for viewing metrics and downloading program data. It automates reporting for the Wikimedia Foundation, replacing manual data requests with fast, self-service exports.
+Google Summer of Code 2026 Proposal
 
+# Programs & Events Dashboard — Staff Metrics and Data Export
 
-# GSoC 2026 — Programs & Events Dashboard: System-Wide Metrics & Data Downloads
+This project is a React-based frontend module designed to be integrated into the [WikiEduDashboard](https://outreachdashboard.wmflabs.org/) (Wikimedia Foundation). It provides a secure, staff-only interface for monitoring system-wide metrics and exporting program data for offline analysis.
 
-[![GSoC 2026](https://img.shields.io/badge/GSoC-2026-red?logo=google&logoColor=white)](https://summerofcode.withgoogle.com/)
-[![Organisation](https://img.shields.io/badge/Org-Wikimedia%20Foundation-blue)](https://www.wikimedia.org/)
-[![Project Size](https://img.shields.io/badge/Size-350%20Hours-green)]()
-[![Difficulty](https://img.shields.io/badge/Difficulty-Medium-orange)]()
-[![Mentor](https://img.shields.io/badge/Mentor-Ragesoss-informational)]()
+## 🏗️ Architecture Overview
 
-> **Contributor:** Sunkireddy Barath  
-> **University:** Chennai Institute of Technology (B.E. Computer Science & Engineering, 2024–2028)  
-> **GitHub:** [@sunkireddy-Barath](https://github.com/sunkireddy-Barath)  
-> **Email:** sunkireddybarath07@gmail.com  
-> **Mentors:** Ragesoss, Abishekdascs  
-> **Organisation:** Wikimedia Foundation  
-> **Phabricator Task:** [T415608](https://phabricator.wikimedia.org/T415608)
+The system follows a modular React architecture that prioritizes internationalization (i18n), responsive design, and robust background task handling.
 
----
-
-## 📌 Project Summary
-
-The [Programs & Events Dashboard](https://outreachdashboard.wmflabs.org/) is a Ruby on Rails + React application that tracks thousands of Wikipedia editing programs — university courses, edit-a-thons, contests, and campaigns — across more than 100 language Wikis worldwide.
-
-**The problem:** Wikimedia Foundation staff (point person: @FRomeo_WMF) need regular access to system-wide data across all programs to report impact. Today this data is generated manually upon request — a developer writes a SQL query, exports it, and sends the file. This repeats every month with no automated solution.
-
-**This project builds that solution.**
-
----
-
-## 🎯 Goals and Deliverables
-
-### Goal 1 — Staff Data Export Endpoint
-
-Build a secured, authenticated API endpoint (`POST /staff/export`) that enables WMF staff to download comprehensive data about all editing projects tracked in the Dashboard as a CSV file — without requiring developer intervention.
-
-**Deliverables:**
-- `StaffDataController` with `require_wmf_staff` role authentication
-- `StaffDataExportJob` (Sidekiq background job) — queries DB in batches, streams CSV, emails download link
-- Filters: date range, wiki language, program type
-- CSV fields: program name, organiser, participants, edits, articles, bytes, wiki, dates
-
-**Success criteria:** FRomeo_WMF can log in, select filters, click Download, and receive a CSV by email in minutes — zero developer involvement.
-
----
-
-### Goal 2 — System-Wide Metrics Overhaul
-
-Overhaul the global metrics available in the Dashboard so WMF staff can see a clear, data-driven picture of the impact Dashboard-tracked programs are making across all language Wikis worldwide.
-
-**Deliverables:**
-- `MetricsService` — computes 6 new aggregate metrics using optimised SQL with 1-hour caching
-- React staff dashboard at `/staff/dashboard` — live charts, filter controls, Download button
-
-**6 New Metrics:**
-| Metric | SQL Approach |
-|--------|-------------|
-| Programs by type | `GROUP BY type` on courses table |
-| Programs by wiki language | `GROUP BY wiki` on courses table |
-| Monthly active editors | `COUNT DISTINCT` on revisions table |
-| New programs per month | `GROUP BY start_date` |
-| Geographic spread | `GROUP BY region` |
-| Editor retention rate | Editors with > 5 edits per program |
-
-**Success criteria:** WMF staff independently view system-wide impact by type, language, and time — page loads within 2 seconds due to caching.
-
----
-
-## 🏗️ Proposed Architecture
-
-```
-┌──────────────────────────────────────────────────────┐
-│                  WMF Staff Browser                   │
-│   FilterPanel │ MetricsCards │ ChartsSection │ ExportPanel │
-└────────────────────────┬─────────────────────────────┘
-                         │ HTTP
-                         ▼
-┌──────────────────────────────────────────────────────┐
-│              StaffDataController (Rails)             │
-│   require_wmf_staff  │  metrics action  │  export action │
-└──────────┬───────────────────────┬───────────────────┘
-           │                       │ enqueue
-           ▼                       ▼
-┌──────────────────┐    ┌──────────────────────────────┐
-│  MetricsService  │    │     StaffDataExportJob        │
-│  Rails.cache TTL │    │  Sidekiq · find_each(500)     │
-│  1-hour caching  │    │  Streaming CSV · ActionMailer │
-└────────┬─────────┘    └──────────────┬───────────────┘
-         │                             │
-         ▼                             ▼
-┌─────────────────────────────────────────────────────┐
-│                      MySQL                          │
-│  courses · courses_users · revisions · articles     │
-└─────────────────────────────────────────────────────┘
+```mermaid
+graph TD
+    Dashboard[StaffDashboard Container] --> Workflow[SystemWorkflow]
+    Dashboard --> Filters[FilterPanel]
+    Dashboard --> Metrics[MetricsCards]
+    Dashboard --> Charts[ChartsSection]
+    Dashboard --> Export[ExportPanel]
+    
+    subgraph "Data Flow"
+        Filters -- "callback(filters)" --> Dashboard
+        Dashboard -- "api.fetchMetrics(filters)" --> API[Mock/Real API Layer]
+        API -- "json" --> Dashboard
+        Dashboard -- "props" --> Metrics
+        Dashboard -- "props" --> Charts
+    end
+    
+    subgraph "Export System"
+        Export -- "POST /staff/export" --> Sidekiq[Sidekiq Background Job]
+        Export -- "Polling (5s)" --> Status[Status Endpoint]
+        Status -- "Queued/Processing/Complete" --> Export
+    end
 ```
 
----
+## 🚀 Key Features
 
-## 🗓️ Timeline (350 Hours)
+### 1. Data Intelligence & Filtering
+- **Dynamic Filters**: Filter global data by Date Range, Wiki Language, and Program Type.
+- **Instant Persistence**: Applying filters refreshes all 6 metric cards and 3 trend charts simultaneously.
 
-| Week | Phase | Key Work | Hours |
-|------|-------|----------|-------|
-| 1–2 | Community Bonding | Codebase study, finalise spec with Ragesoss | 25 |
-| 3 | Design | API design, DB migration plan, UI wireframes | 25 |
-| 4–5 | Auth & Controller | `wmf_staff` role, `StaffDataController`, routes, RSpec | 50 |
-| 6–7 | Export Job & CSV | `StaffDataExportJob`, batching, ActionMailer, job specs | 50 |
-| 8–9 | Metrics Overhaul | `MetricsService`, 6 metrics, caching, RSpec — **Mid-term** | 50 |
-| 10–11 | React Frontend | Dashboard page, FilterPanel, ChartsSection, ExportPanel | 50 |
-| 12 | Full Testing | RSpec + Jest, integration test, CI must pass | 25 |
-| 13 | Documentation | API docs, README, CSV data dictionary | 25 |
-| 14 | Buffer & Polish | Mentor feedback, edge cases, final PR submission | 25 |
-| | **Total** | | **350** |
+### 2. Staff-Only Metrics
+- **Six Key Performance Indicators (KPIs)**:
+  - Total Programs, Monthly Active Editors, Total Edits, Articles Improved, New Programs, and Retention Rate.
+- **Cache Management**: Displays a "Data cached" notice reflecting the 1-hour TTL logic of the backend.
 
-**Mid-term deliverable:** Working `/staff/metrics` endpoint — authenticated, cached, tested.  
-**Final deliverable:** Full `/staff/dashboard` React page — metrics, charts, CSV export by email.
+### 3. Advanced Visualizations (Recharts)
+- **Programs by Type**: Categorized bar chart (Education, Edit-a-thons, etc.).
+- **Editor Trends**: Monthly time-series line chart.
+- **Global Wiki Reach**: Horizontal bar chart of programs by language, utilizing specific WMF color branding.
 
----
+### 4. Background Export Workflow
+- **Sidekiq Integration**: Triggers a background job for heavy CSV generation to prevent UI locking.
+- **Real-time Polling**: Recursive status tracking (Queued → Processing → Email delivery) with visual success/failure indicators.
 
-## 🛠️ Tech Stack
+## 🛠️ Technical Stack
+- **Framework**: React 18+ (Functional Components & Hooks only)
+- **State Management**: React `useState` & `useCallback` for optimized re-rendering.
+- **Visualization**: [Recharts](https://recharts.org/) for responsive, accessible data plotting.
+- **Styling**: Vanilla CSS (Wikipedia-inspired "Human" minimal design).
+- **Internationalization**: Custom `i18n.js` with `t()` helper for 100% translatable UI.
 
-| Layer | Technology |
-|-------|-----------|
-| Backend | Ruby on Rails |
-| Background Jobs | Sidekiq |
-| Metrics & Caching | ActiveRecord + Rails.cache |
-| Frontend | React + JavaScript |
-| Database | MySQL |
-| Testing | RSpec (Ruby) + Jest (JavaScript) |
+## 📦 Project Structure
+- `src/components/`: Modular React components.
+- `src/styles/`: Shared CSS matching WikiEduDashboard conventions.
+- `src/mockApi.js`: Simulated backend for standalone verification.
+- `src/i18n.js`: Centralized string management.
 
----
-
-## 🤝 Prior Contributions
-
-| PR | Status | Description |
-|----|--------|-------------|
-| [WikiEduDashboard #6705](https://github.com/WikiEducationFoundation/WikiEduDashboard/pull/6705) | ✅ Merged | Fixed image caption inclusion in `GetRevisionPlaintext` service |
-| [WikiEduDashboard #6735](https://github.com/WikiEducationFoundation/WikiEduDashboard/pull/6735) | 🔄 Under Review | Fixed i18n deprecation warning in `fast_training_alert.jsx` |
-| [FHIR Tabular Viewer #46](https://github.com/chicagopcdc/FHIR_resource_tabular_viewer/pull/46) | 🔄 Under Review | Unified `npm run dev` developer workflow |
+## ⚙️ Setup & Development
+1. **Install dependencies**: `npm install`
+2. **Start Dev Server**: `npm run dev`
+3. **Build Core**: `npm run build`
 
 ---
-
-## 📚 References
-
-- [Programs & Events Dashboard](https://outreachdashboard.wmflabs.org/)
-- [WikiEduDashboard GitHub](https://github.com/WikiEducationFoundation/WikiEduDashboard)
-- [Phabricator Task T415608](https://phabricator.wikimedia.org/T415608)
-- [CONTRIBUTING.md](https://github.com/WikiEducationFoundation/WikiEduDashboard/blob/master/CONTRIBUTING.md)
-- [GSoC 2026](https://summerofcode.withgoogle.com/)
-
----
-
-*This repository documents my GSoC 2026 proposal for the Wikimedia Foundation — Programs & Events Dashboard project.*
+*Created as part of the GSoC 2026 Proposal for Wikimedia Foundation.*
