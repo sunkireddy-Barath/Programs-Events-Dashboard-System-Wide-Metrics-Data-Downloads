@@ -64,7 +64,12 @@ graph TD
 - `src/mockApi.js`: Simulated backend for standalone verification.
 - `src/i18n.js`: Centralized string management.
 
-## ⚙️ Setup & Development
+## ⚙️ Quick Start (Windows)
+For convenience, use the included batch scripts to manage the project:
+1. **Setup**: Run `setup.bat` to install all necessary dependencies automatically.
+2. **Launch**: Run `start.bat` to start the development server and open the dashboard.
+
+## 🛠️ Manual CLI Setup
 1. **Install dependencies**: `npm install`
 2. **Start Dev Server**: `npm run dev`
 3. **Build Core**: `npm run build`
