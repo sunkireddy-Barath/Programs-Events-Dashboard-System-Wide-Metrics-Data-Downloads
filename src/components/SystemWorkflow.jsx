@@ -10,18 +10,16 @@ function SystemWorkflow() {
   ];
 
   return (
-    <div className="section workflow-simple">
-      <div className="workflow-title-row">
-        <span className="workflow-main-title">{t('workflow_title')}</span>
-      </div>
+    <div className="section workflow-box">
+      <div className="workflow-title">{t('workflow_title')}</div>
       <div className="workflow-list">
         {steps.map((s, i) => (
           <div key={i} className="workflow-item">
-            <div className="workflow-item-header">
-              <span className="workflow-number">{i + 1}</span>
-              <span className="workflow-item-title">{s.title.replace(/^\d\.\s/, '')}</span>
+            <div className="workflow-header">
+              <span className="workflow-step-num">{i + 1}</span>
+              <span className="workflow-step-title">{s.title}</span>
             </div>
-            <p className="workflow-item-desc">{s.desc}</p>
+            <p className="workflow-step-desc">{s.desc}</p>
           </div>
         ))}
       </div>

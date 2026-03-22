@@ -1,202 +1,76 @@
-/* staffDashboard.css — Staff Dashboard — Programs & Events Dashboard
-   Clean, minimal, human-centric design matching WikiEduDashboard.
-*/
+/* staffDashboard.css — Clean, simple, manual design */
 
-/* ─── Global Reset ───────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #f8f9fa; color: #1a1a1a; line-height: 1.5; }
 
-body {
-  font-family: Arial, sans-serif;
-  background: #f9f9f9; /* Lighter background for a cleaner feel */
-  color: #1a1a1a;
-  line-height: 1.5;
-}
+.sd-header { background: #fff; border-bottom: 1px solid #ddd; padding: 20px 30px; }
+.sd-title { font-size: 22px; color: #3a6fa8; }
+.sd-subtitle { font-size: 13px; color: #555; }
 
-/* ─── Header ────────────────────────────────────────────────── */
-.sd-header {
-  background: #fff;
-  border-bottom: 1px solid #ddd;
-  padding: 20px 32px;
-}
-.sd-title    { font-size: 24px; font-weight: 700; color: #3a6fa8; }
-.sd-subtitle { font-size: 14px; color: #555; margin-top: 5px; }
+.sd-body { max-width: 1200px; margin: 0 auto; padding: 20px 30px; display: flex; flex-direction: column; gap: 20px; }
 
-/* ─── Body Layout ────────────────────────────────────────────── */
-.sd-body {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-}
+.section { background: #fff; border: 1px solid #ddd; padding: 20px; border-radius: 2px; }
+.section-title { font-size: 14px; font-weight: 700; border-bottom: 1px solid #eee; margin-bottom: 15px; padding-bottom: 8px; }
 
-/* ─── Generic Section ────────────────────────────────────────── */
-.section {
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 2px; /* Sharper corners for a more manual feel */
-  padding: 24px;
-}
-.section-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: #1a1a1a;
-  margin-bottom: 18px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #eee;
-}
-
-/* ─── Workflow (Simplified) ──────────────────────────────────── */
-.workflow-simple {
-  background: #fdfdfd;
-  border: 1px solid #eee;
-}
-.workflow-main-title {
-  font-size: 13px;
-  font-weight: 700;
-  color: #888;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 15px;
-  display: block;
-}
-.workflow-list {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-}
-.workflow-item {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.workflow-item-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.workflow-number {
-  font-size: 12px;
-  font-weight: 700;
-  color: #fff;
-  background: #3a6fa8;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 2px;
-}
-.workflow-item-title {
-  font-size: 14px;
-  font-weight: 700;
-  color: #333;
-}
-.workflow-item-desc {
-  font-size: 12px;
-  color: #666;
-  line-height: 1.5;
-}
-
-@media (max-width: 900px) { .workflow-list { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 500px) { .workflow-list { grid-template-columns: 1fr; } }
-
-/* ─── Filter Panel ───────────────────────────────────────────── */
-.filter-row    { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; }
-.filter-group  { display: flex; flex-direction: column; gap: 6px; }
-.filter-label  { font-size: 12px; font-weight: 700; color: #444; }
-.filter-input, .filter-select {
-  font-family: inherit;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  padding: 8px 12px;
-  background: #fff;
-}
-.filter-input:focus, .filter-select:focus { border-color: #3a6fa8; }
-.date-pair     { display: flex; gap: 8px; align-items: center; }
-.date-sep      { color: #aaa; }
+/* Filter Panel */
+.filter-row { display: flex; flex-wrap: wrap; gap: 15px; align-items: flex-end; }
+.filter-group { display: flex; flex-direction: column; gap: 5px; }
+.filter-label { font-size: 12px; font-weight: 700; color: #444; }
+.filter-input, .filter-select { font-family: inherit; font-size: 14px; border: 1px solid #ccc; padding: 6px 10px; border-radius: 2px; }
+.date-pair { display: flex; gap: 8px; align-items: center; }
 .filter-actions { display: flex; gap: 10px; margin-left: auto; align-items: center; }
+.filter-success-msg { color: #27ae60; font-size: 13px; font-weight: 600; }
 
-.filter-success-msg { font-size: 13px; color: #27ae60; font-weight: 600; }
+/* Metrics */
+.metrics-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; }
+.card { padding: 15px; border: 1px solid #eee; background: #fff; }
+.card-lbl { font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase; margin-bottom: 5px; }
+.card-val { font-size: 24px; font-weight: 700; color: #3a6fa8; }
+.card-sub { font-size: 11px; color: #aaa; }
 
-/* ─── Buttons ────────────────────────────────────────────────── */
-.btn {
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 700;
-  border: 1px solid transparent;
-  border-radius: 3px;
-  padding: 8px 18px;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-.btn-primary   { background: #3a6fa8; color: #fff; border-color: #3a6fa8; }
-.btn-secondary { background: #fff; color: #333; border-color: #ccc; }
-.btn-primary:hover, .btn-secondary:hover { opacity: 0.85; }
-.btn-lg        { padding: 10px 24px; font-size: 15px; }
+.metrics-footer { display: flex; justify-content: space-between; margin-top: 15px; font-size: 11px; color: #aaa; border-top: 1px solid #eee; padding-top: 10px; }
 
-/* ─── Metrics Grid ───────────────────────────────────────────── */
-.cards-grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 16px;
-}
-@media (max-width: 1100px) { .cards-grid { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 600px)  { .cards-grid { grid-template-columns: repeat(2, 1fr); } }
+/* Charts */
+.charts-list { display: flex; flex-direction: column; gap: 20px; }
+.chart-item { background: #fff; border: 1px solid #ddd; padding: 20px; }
+.chart-header { font-size: 13px; font-weight: 700; margin-bottom: 15px; }
 
-.card {
-  padding: 20px;
-  border: 1px solid #eee;
-  background: #fff;
-}
-.card-title { font-size: 12px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
-.card-value { font-size: 28px; font-weight: 700; color: #3a6fa8; margin-bottom: 4px; }
-.card-sub   { font-size: 12px; color: #999; }
+/* Export */
+.export-desc { font-size: 13px; color: #444; margin-bottom: 15px; }
+.export-workflow-preview { border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px; color: #888; font-size: 12px; font-weight: 700; display: flex; gap: 10px; text-transform: uppercase; }
+.export-workflow-preview .active { color: #3a6fa8; }
 
-.metrics-footer {
-  margin-top: 20px; padding-top: 15px;
-  border-top: 1px solid #eee;
-  display: flex; justify-content: space-between; align-items: center;
-}
-.footer-notice    { font-size: 12px; color: #999; }
-.footer-timestamp { font-size: 12px; color: #999; font-weight: 700; }
+.export-fields-box { background: #f9f9f9; padding: 10px; margin-bottom: 15px; border: 1px solid #eee; }
+.export-fields-box .lbl { font-size: 10px; color: #999; font-weight: 700; text-transform: uppercase; }
+.export-fields-box .txt { font-size: 12px; color: #666; }
 
-/* ─── Chart Blocks ───────────────────────────────────────────── */
-.charts-col  { display: flex; flex-direction: column; gap: 28px; }
-.chart-block {
-  background: #fff;
-  border: 1px solid #ddd;
-  padding: 25px;
-}
-.chart-title { font-size: 14px; font-weight: 700; color: #1a1a1a; margin-bottom: 20px; }
+.export-footer { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+.limit-notice { font-size: 11px; color: #999; }
 
-/* ─── Export Panel ───────────────────────────────────────────── */
-.export-desc       { font-size: 14px; color: #444; margin-bottom: 20px; }
-.export-fields     { background: #f9f9f9; border: 1px solid #eee; padding: 15px; margin-bottom: 20px; border-radius: 2px; }
-.export-fields-lbl { font-size: 11px; font-weight: 700; color: #999; text-transform: uppercase; margin-bottom: 8px; }
-.export-fields-txt { font-size: 13px; color: #555; line-height: 1.6; }
+/* Workflow Box */
+.workflow-box { border: 1px solid #ddd; background: #fbfbfb; }
+.workflow-title { font-size: 12px; font-weight: 700; color: #aaa; text-transform: uppercase; margin-bottom: 12px; }
+.workflow-list { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+.workflow-item { display: flex; flex-direction: column; gap: 3px; }
+.workflow-header { display: flex; align-items: center; gap: 6px; }
+.workflow-step-num { font-size: 10px; font-weight: 700; color: #fff; background: #3a6fa8; width: 16px; height: 16px; line-height: 16px; text-align: center; border-radius: 1px; }
+.workflow-step-title { font-size: 13px; font-weight: 700; }
+.workflow-step-desc { font-size: 11px; color: #666; }
 
-.export-flow-preview {
-  margin-bottom: 20px;
-  padding: 12px 0;
-  border-bottom: 1px solid #eee;
-}
-.flow-title { font-size: 12px; font-weight: 700; color: #999; text-transform: uppercase; margin-bottom: 10px; }
-.flow-steps { display: flex; align-items: center; gap: 12px; }
-.flow-step  { font-size: 13px; color: #777; font-weight: 600; }
-.flow-step.active { color: #3a6fa8; font-weight: 700; }
-.flow-arrow { color: #ccc; }
+/* Buttons */
+.btn { font-size: 13px; font-weight: 700; cursor: pointer; border: 1px solid transparent; border-radius: 2px; padding: 6px 12px; }
+.btn-primary { background: #3a6fa8; color: #fff; }
+.btn-secondary { background: #fff; border-color: #ccc; color: #333; }
+.btn-lg { padding: 8px 20px; font-size: 14px; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-.job-box {
-  display: flex; gap: 12px; background: #f9f9f9; padding: 15px; border: 1px solid #eee; margin-top: 15px;
-}
-.job-text { font-size: 14px; font-weight: 700; }
-.job-processing .job-text { color: #3a6fa8; }
+/* Helpers */
+.loading-card, .loading-chart { background: #f5f5f5; height: 100px; border: 1px dashed #ddd; }
+.shimmer-line { background: #eee; height: 10px; margin-bottom: 5px; }
 
-/* ─── Spinner ────────────────────────────────────────────────── */
-@keyframes spin { to { transform: rotate(360deg); } }
-.spinner {
-  width: 18px; height: 18px; border: 2px solid #ccc; border-top-color: #3a6fa8; border-radius: 50%; animation: spin 0.8s linear infinite;
+@media (max-width: 800px) {
+  .workflow-list { grid-template-columns: repeat(2, 1fr); }
+  .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+  .filter-row { flex-direction: column; align-items: stretch; }
+  .filter-actions { margin-left: 0; width: 100%; justify-content: flex-end; }
 }

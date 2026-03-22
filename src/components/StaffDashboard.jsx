@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { t } from '../i18n';
 import { fetchMetrics } from '../mockApi';
 import FilterPanel, { initFilters } from './FilterPanel';
@@ -10,53 +10,59 @@ import SystemWorkflow from './SystemWorkflow';
 function StaffDashboard() {
   const [metrics, setMetrics] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error,   setError]   = useState(false);
+  const [error, setError] = useState(false);
   const [filters, setFilters] = useState(initFilters);
-  const [lastUpdated, setLastUpdated] = useState(null);
+  const [lastUpdated, setLastUpdated] = useState('');
 
-  const load = useCallback(async (f) => {
+  const loadData = (currentFilters) => {
     setLoading(true);
     setError(false);
-    try {
-      const data = await fetchMetrics(f);
-      setMetrics(data);
-      setLastUpdated(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-    } catch {
-      setError(true);
-      setMetrics(null);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    fetchMetrics(currentFilters)
+      .then((data) => {
+        setMetrics(data);
+        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        setLastUpdated(time);
+        setLoading(false);
+      })
+      .catch(() => {
+        setError(true);
+        setLoading(false);
+      });
+  };
 
-  // Fetch on mount
-  useEffect(() => { load(filters); }, []); // eslint-disable-line
+  useEffect(() => {
+    loadData(filters);
+  }, []); // Initial load only
 
-  function handleApply(f)  { setFilters(f); load(f); }
-  function handleReset(f)  { setFilters(f); load(f); }
+  const handleApply = (newFilters) => {
+    setFilters(newFilters);
+    loadData(newFilters);
+  };
 
-  const shared = { metrics, loading, error, onRetry: () => load(filters), lastUpdated };
+  const handleReset = (defaultFilters) => {
+    setFilters(defaultFilters);
+    loadData(defaultFilters);
+  };
 
   return (
-    <div>
-      {/* Page header */}
+    <div className="staff-dashboard">
       <div className="sd-header">
         <h1 className="sd-title">{t('page_title')}</h1>
         <p className="sd-subtitle">{t('page_subtitle')}</p>
       </div>
 
-      {/* Main content */}
       <div className="sd-body">
-        {/* Addition: System Workflow Overview */}
         <SystemWorkflow />
-
-        {/* Filters */}
         <FilterPanel onApply={handleApply} onReset={handleReset} disabled={loading} />
         
-        {/* Metric Cards */}
-        <div className="section">
-          <MetricsCards {...shared} />
-          {metrics && !loading && !error && (
+        <div className="section metrics-section">
+          <MetricsCards 
+            metrics={metrics} 
+            loading={loading} 
+            error={error} 
+            onRetry={() => loadData(filters)} 
+          />
+          {lastUpdated && !loading && !error && (
             <div className="metrics-footer">
               <span className="footer-notice">{t('data_cached_notice')}</span>
               <span className="footer-timestamp">{t('last_updated_lbl')} {lastUpdated}</span>
@@ -64,8 +70,7 @@ function StaffDashboard() {
           )}
         </div>
 
-        {/* Charts and Export */}
-        <ChartsSection {...shared} />
+        <ChartsSection metrics={metrics} loading={loading} error={error} />
         <ExportPanel filters={filters} />
       </div>
     </div>

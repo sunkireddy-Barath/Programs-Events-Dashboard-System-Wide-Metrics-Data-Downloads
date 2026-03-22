@@ -1,64 +1,30 @@
-/**
- * api.js — Staff Dashboard API Layer
- * Replaces earlier mock data with real fetch() calls to the Rails backend.
- * 
- * Endpoints:
- * - GET /staff/metrics (returns aggregate data)
- * - POST /staff/export (triggers Sidekiq job)
- * - GET /staff/export/status (polls job status)
- */
+// api.js — Real API interaction logic
+// Manual human-edited version: simple fetch calls.
 
-const handleResponse = async (res) => {
-  if (!res.ok) {
-    const errorData = await res.json().catch(() => ({}));
-    throw new Error(errorData.error || `HTTP error! status: ${res.status}`);
-  }
-  return res.json();
-};
-
-/**
- * Fetches aggregate metrics for the dashboard.
- * @param {Object} filters - { startDate, endDate, lang, type }
- */
-export async function fetchMetrics(filters = {}) {
-  const query = new URLSearchParams({
-    start: filters.startDate || '',
-    end:   filters.endDate   || '',
-    lang:  filters.lang      || '',
-    type:  filters.type      || '',
-  }).toString();
-
-  const response = await fetch(`/staff/metrics?${query}`, {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
-  });
-  
-  return handleResponse(response);
+export function fetchMetrics(filters) {
+  const query = new URLSearchParams(filters).toString();
+  return fetch(`/staff/metrics?${query}`)
+    .then(res => {
+      if (!res.ok) throw new Error("API error");
+      return res.json();
+    });
 }
 
-/**
- * Requests a new CSV export job.
- * @param {Object} filters - current filter state to apply to the export
- */
-export async function requestExport(filters = {}) {
-  const response = await fetch('/staff/export', {
+export function requestExport(filters) {
+  return fetch('/staff/export', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ filters }),
+    body: JSON.stringify(filters)
+  }).then(res => {
+    if (!res.ok) throw new Error("Export request failed");
+    return res.json();
   });
-
-  return handleResponse(response);
 }
 
-/**
- * Checks the status of a background export job.
- * @param {string} jobId - the ID returned by requestExport
- */
-export async function fetchExportStatus(jobId) {
-  const response = await fetch(`/staff/export/status?job_id=${jobId}`, {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
-  });
-
-  return handleResponse(response);
+export function fetchExportStatus(jobId) {
+  return fetch(`/staff/export/status?job_id=${jobId}`)
+    .then(res => {
+      if (!res.ok) throw new Error("Status check failed");
+      return res.json();
+    });
 }

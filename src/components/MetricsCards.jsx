@@ -1,65 +1,47 @@
 import React from 'react';
 import { t } from '../i18n';
 
-function SkeletonCard() {
-  return (
-    <div className="card">
-      <div className="skel skel-line" style={{ width: '60%' }} />
-      <div className="skel skel-line" style={{ width: '40%', height: 28, marginTop: 10 }} />
-      <div className="skel skel-line" style={{ width: '75%', marginTop: 10 }} />
-    </div>
-  );
-}
-
-const CARDS = [
-  { key: 'total_programs',             title: 'total_programs_title',          sub: 'total_programs_subtitle' },
-  { key: 'monthly_active_editors',     title: 'monthly_active_editors_title',  sub: 'monthly_active_editors_subtitle' },
-  { key: 'total_edits',                title: 'total_edits_title',             sub: 'total_edits_subtitle' },
-  { key: 'articles_improved',          title: 'articles_improved_title',       sub: 'articles_improved_subtitle' },
-  { key: 'new_programs_this_month',    title: 'new_programs_title',            sub: 'new_programs_subtitle' },
-  { key: 'editor_retention_rate',      title: 'retention_rate_title',          sub: 'retention_rate_subtitle', suffix: '%' },
-];
-
-const format = (val, isPct) => {
-  if (val == null) return '—';
-  return isPct ? val.toFixed(1) + '%' : Number(val).toLocaleString();
-};
-
 function MetricsCards({ metrics, loading, error, onRetry }) {
   if (loading) {
     return (
-      <div className="cards-grid">
-        {[1, 2, 3, 4, 5, 6].map((i) => <SkeletonCard key={i} />)}
+      <div className="metrics-grid">
+        {[1, 2, 3, 4, 5, 6].map(i => (
+          <div key={i} className="card loading-card">
+            <div className="shimmer-line" style={{ width: '50%' }}></div>
+            <div className="shimmer-line" style={{ width: '30%', height: 24, marginTop: 10 }}></div>
+          </div>
+        ))}
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="state-error">
-        <p className="state-msg">{t('loading_error')}</p>
+      <div className="error-box">
+        <p>{t('loading_error')}</p>
         <button className="btn btn-primary" onClick={onRetry}>{t('retry_button')}</button>
       </div>
     );
   }
 
-  if (!metrics) {
-    return (
-      <div className="state-empty">
-        <p className="state-msg">{t('no_data_message')}</p>
-      </div>
-    );
-  }
+  if (!metrics) return null;
+
+  const cardList = [
+    { label: 'total_programs_title',       val: metrics.total_programs.toLocaleString(),               sub: 'total_programs_subtitle' },
+    { label: 'monthly_active_editors_title', val: metrics.monthly_active_editors.toLocaleString(),       sub: 'monthly_active_editors_subtitle' },
+    { label: 'total_edits_title',          val: metrics.total_edits.toLocaleString(),                  sub: 'total_edits_subtitle' },
+    { label: 'articles_improved_title',    val: metrics.articles_improved.toLocaleString(),             sub: 'articles_improved_subtitle' },
+    { label: 'new_programs_title',         val: metrics.new_programs_this_month.toLocaleString(),       sub: 'new_programs_subtitle' },
+    { label: 'retention_rate_title',       val: metrics.editor_retention_rate.toFixed(1) + '%',         sub: 'retention_rate_subtitle' },
+  ];
 
   return (
-    <div className="cards-grid">
-      {CARDS.map((card) => (
-        <div key={card.key} className="card">
-          <div className="card-title">{t(card.title)}</div>
-          <div className="card-value">
-            {format(metrics[card.key], card.key === 'editor_retention_rate')}
-          </div>
-          <div className="card-sub">{t(card.sub)}</div>
+    <div className="metrics-grid">
+      {cardList.map((c, i) => (
+        <div key={i} className="card">
+          <div className="card-lbl">{t(c.label)}</div>
+          <div className="card-val">{c.val}</div>
+          <div className="card-sub">{t(c.sub)}</div>
         </div>
       ))}
     </div>

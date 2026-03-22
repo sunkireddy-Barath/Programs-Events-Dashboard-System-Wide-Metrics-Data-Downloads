@@ -1,114 +1,85 @@
 import React from 'react';
 import {
   BarChart, Bar, LineChart, Line, XAxis, YAxis,
-  CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell,
+  CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell
 } from 'recharts';
 import { t } from '../i18n';
 
-const BLUE = '#3a6fa8', GREEN = '#27ae60', ORANGE = '#e67e22', PURPLE = '#8e44ad';
-// Simplified tooltip style (no custom borders/shadows)
-const TT_STYLE = { borderRadius: 0, border: '1px solid #ccc', fontSize: 13 };
+const COLORS = {
+  blue: '#3a6fa8',
+  green: '#27ae60',
+  orange: '#e67e22',
+  purple: '#8e44ad',
+  grey: '#eee'
+};
 
-function SkeletonChart() {
-  return (
-    <div className="chart-block">
-      <div className="skel skel-line" style={{ width: 220, marginBottom: 15 }} />
-      <div className="skel skel-chart" />
-    </div>
-  );
-}
-
-function ChartsSection({ metrics, loading, error, onRetry }) {
-  if (loading) {
+function ChartsSection({ metrics, loading, error }) {
+  if (loading || error || !metrics) {
     return (
-      <div className="charts-col">
-        <SkeletonChart /><SkeletonChart /><SkeletonChart />
+      <div className="charts-list">
+        <div className="chart-item loading-chart"></div>
+        <div className="chart-item loading-chart"></div>
+        <div className="chart-item loading-chart"></div>
       </div>
     );
   }
 
-  if (error) {
-    return (
-      <div className="chart-block">
-        <div className="state-error">
-          <p className="state-msg">{t('loading_error')}</p>
-          <button className="btn btn-primary" onClick={onRetry}>{t('retry_button')}</button>
-        </div>
-      </div>
-    );
-  }
-
-  if (!metrics) {
-    return (
-      <div className="chart-block">
-        <div className="state-empty"><p className="state-msg">{t('no_data_message')}</p></div>
-      </div>
-    );
-  }
-
-  const byType = [
-    { name: t('type_education'), value: metrics.programs_by_type.education,  fill: BLUE   },
-    { name: t('type_editathon'), value: metrics.programs_by_type.edit_a_thon, fill: GREEN  },
-    { name: t('type_contest'),   value: metrics.programs_by_type.contest,     fill: ORANGE },
-    { name: t('type_other'),     value: metrics.programs_by_type.other,       fill: PURPLE },
+  const typeData = [
+    { name: t('type_education'), count: metrics.programs_by_type.education,   color: COLORS.blue },
+    { name: t('type_editathon'), count: metrics.programs_by_type.edit_a_thon, color: COLORS.green },
+    { name: t('type_contest'),   count: metrics.programs_by_type.contest,     color: COLORS.orange },
+    { name: t('type_other'),     count: metrics.programs_by_type.other,       color: COLORS.purple }
   ];
 
   return (
-    <div className="charts-col">
-
-      {/* Chart 1 — Programs by Type */}
-      <div className="chart-block">
-        <div className="chart-title">{t('chart_programs_by_type')}</div>
-        <ResponsiveContainer width="100%" height={260}>
-          <BarChart data={byType} margin={{ top: 0, right: 20, left: 0, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#eee" vertical={false} />
-            <XAxis dataKey="name" tick={{ fontSize: 12, fill: '#666' }} axisLine={{ stroke: '#ddd' }} tickLine={false} />
-            <YAxis tick={{ fontSize: 11, fill: '#999' }} axisLine={false} tickLine={false} width={45} />
-            <Tooltip contentStyle={TT_STYLE} cursor={{ fill: '#f9f9f9' }} />
-            <Bar dataKey="value" name={t('lbl_count')} radius={0}>
-              {byType.map((d) => <Cell key={d.name} fill={d.fill} />)}
+    <div className="charts-list">
+      {/* 1. Bar Chart */}
+      <div className="chart-item">
+        <div className="chart-header">{t('chart_programs_by_type')}</div>
+        <ResponsiveContainer width="100%" height={250}>
+          <BarChart data={typeData}>
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={COLORS.grey} />
+            <XAxis dataKey="name" fontSize={12} tickLine={false} />
+            <YAxis fontSize={11} axisLine={false} tickLine={false} />
+            <Tooltip cursor={{fill: '#f5f5f5'}} />
+            <Bar dataKey="count" name={t('lbl_count')}>
+              {typeData.map((d, i) => <Cell key={i} fill={d.color} />)}
             </Bar>
           </BarChart>
         </ResponsiveContainer>
       </div>
 
-      {/* Chart 2 — Monthly Active Editors */}
-      <div className="chart-block">
-        <div className="chart-title">{t('chart_monthly_active_editors')}</div>
-        <ResponsiveContainer width="100%" height={260}>
-          <LineChart data={metrics.monthly_active_editors_trend} margin={{ top: 0, right: 20, left: 0, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#eee" vertical={false} />
-            <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#666' }} axisLine={{ stroke: '#ddd' }} tickLine={false} />
-            <YAxis tick={{ fontSize: 11, fill: '#999' }} axisLine={false} tickLine={false} width={45} />
-            <Tooltip contentStyle={TT_STYLE} />
-            <Legend wrapperStyle={{ fontSize: 13, paddingTop: 10 }} />
-            <Line
-              type="monotone" dataKey="editors" name={t('lbl_editors')}
-              stroke={BLUE} strokeWidth={2}
-              dot={{ r: 3, fill: BLUE, strokeWidth: 0 }} activeDot={{ r: 5 }}
+      {/* 2. Line Chart */}
+      <div className="chart-item">
+        <div className="chart-header">{t('chart_monthly_active_editors')}</div>
+        <ResponsiveContainer width="100%" height={250}>
+          <LineChart data={metrics.monthly_active_editors_trend}>
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={COLORS.grey} />
+            <XAxis dataKey="month" fontSize={12} tickLine={false} />
+            <YAxis fontSize={11} axisLine={false} tickLine={false} />
+            <Tooltip />
+            <Legend />
+            <Line 
+              type="monotone" dataKey="editors" name={t('lbl_editors')} 
+              stroke={COLORS.blue} strokeWidth={2} dot={{r: 4}} 
             />
           </LineChart>
         </ResponsiveContainer>
       </div>
 
-      {/* Chart 3 — Programs by Wiki Language */}
-      <div className="chart-block">
-        <div className="chart-title">{t('chart_programs_by_wiki_language')}</div>
-        <ResponsiveContainer width="100%" height={340}>
-          <BarChart
-            data={metrics.programs_by_wiki_language}
-            layout="vertical"
-            margin={{ top: 0, right: 20, left: 60, bottom: 0 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" stroke="#eee" horizontal={false} />
-            <XAxis type="number" tick={{ fontSize: 11, fill: '#999' }} axisLine={false} tickLine={false} />
-            <YAxis type="category" dataKey="language" tick={{ fontSize: 12, fill: '#666' }} axisLine={{ stroke: '#ddd' }} tickLine={false} width={65} />
-            <Tooltip contentStyle={TT_STYLE} cursor={{ fill: '#f9f9f9' }} />
-            <Bar dataKey="count" name={t('lbl_count')} fill={BLUE} radius={0} />
+      {/* 3. Horizontal Bar Chart */}
+      <div className="chart-item">
+        <div className="chart-header">{t('chart_programs_by_wiki_language')}</div>
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={metrics.programs_by_wiki_language} layout="vertical" margin={{left: 40}}>
+            <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke={COLORS.grey} />
+            <XAxis type="number" fontSize={11} axisLine={false} tickLine={false} />
+            <YAxis type="category" dataKey="language" fontSize={12} tickLine={false} width={60} />
+            <Tooltip cursor={{fill: '#f5f5f5'}} />
+            <Bar dataKey="count" name={t('lbl_count')} fill={COLORS.blue} />
           </BarChart>
         </ResponsiveContainer>
       </div>
-
     </div>
   );
 }

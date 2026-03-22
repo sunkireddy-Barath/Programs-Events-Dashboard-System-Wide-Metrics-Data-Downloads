@@ -1,49 +1,50 @@
-// mockApi.js — Simulated backend responses for development.
-// This is restored to allow the frontend to work without a real Rails backend.
+// mockApi.js — Simulating backend API for development
 
-const wait = (ms) => new Promise((r) => setTimeout(r, ms));
-
-const METRICS = {
-  total_programs: 12847,
-  monthly_active_editors: 3421,
-  total_edits: 847293,
-  articles_improved: 156204,
-  new_programs_this_month: 143,
-  editor_retention_rate: 67.4,
-  programs_by_type: { education: 7234, edit_a_thon: 3102, contest: 1456, other: 1055 },
-  monthly_active_editors_trend: [
-    { month: 'Jan', editors: 2841 }, { month: 'Feb', editors: 3012 },
-    { month: 'Mar', editors: 3234 }, { month: 'Apr', editors: 2987 },
-    { month: 'May', editors: 3156 }, { month: 'Jun', editors: 3421 },
-    { month: 'Jul', editors: 3289 }, { month: 'Aug', editors: 3567 },
-    { month: 'Sep', editors: 3102 }, { month: 'Oct', editors: 3445 },
-    { month: 'Nov', editors: 3621 }, { month: 'Dec', editors: 3421 },
-  ],
-  programs_by_wiki_language: [
-    { language: 'English', count: 5234 }, { language: 'Hindi', count: 1823 },
-    { language: 'Tamil', count: 987 },   { language: 'French', count: 876 },
-    { language: 'Spanish', count: 743 },  { language: 'German', count: 621 },
-    { language: 'Arabic', count: 534 },   { language: 'Portuguese', count: 498 },
-    { language: 'Bengali', count: 412 },  { language: 'Other', count: 1119 },
-  ],
-};
-
-export async function fetchMetrics(/* filters */) {
-  await wait(900);
-  return JSON.parse(JSON.stringify(METRICS));
+export function fetchMetrics(filters) {
+  console.log("Mock API: Fetching metrics with", filters);
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        total_programs: 12847,
+        monthly_active_editors: 45210,
+        total_edits: 18450000,
+        articles_improved: 95500,
+        new_programs_this_month: 245,
+        editor_retention_rate: 68.5,
+        programs_by_type: { education: 45, edit_a_thon: 25, contest: 15, other: 15 },
+        monthly_active_editors_trend: [
+          {month: 'Jan', editors: 42000}, {month: 'Feb', editors: 43500}, 
+          {month: 'Mar', editors: 45000}, {month: 'Apr', editors: 44200},
+          {month: 'May', editors: 46000}, {month: 'Jun', editors: 47500}, 
+          {month: 'Jul', editors: 48000}, {month: 'Aug', editors: 47000},
+          {month: 'Sep', editors: 49000}, {month: 'Oct', editors: 51000}, 
+          {month: 'Nov', editors: 52500}, {month: 'Dec', editors: 54000}
+        ],
+        programs_by_wiki_language: [
+          {language: 'English', count: 5500}, {language: 'Hindi', count: 1200},
+          {language: 'French', count: 950}, {language: 'Spanish', count: 880},
+          {language: 'German', count: 720}, {language: 'Portuguese', count: 650}
+        ]
+      });
+    }, 800);
+  });
 }
 
-export async function requestExport(/* filters */) {
-  await wait(400);
-  return { status: 'queued', job_id: 'job-' + Date.now() };
+export function requestExport(filters) {
+  console.log("Mock API: Export requested", filters);
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ job_id: "job_" + Date.now(), status: "queued" });
+    }, 500);
+  });
 }
 
-const jobStarts = {};
-export async function fetchExportStatus(jobId) {
-  await wait(200);
-  if (!jobStarts[jobId]) jobStarts[jobId] = Date.now();
-  const elapsed = Date.now() - jobStarts[jobId];
-  if (elapsed < 3000)  return { status: 'queued',      job_id: jobId };
-  if (elapsed < 10000) return { status: 'processing',  job_id: jobId };
-  return { status: 'complete', job_id: jobId };
+export function fetchExportStatus(jobId) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const statuses = ["queued", "processing", "processing", "complete"];
+      const rand = Math.floor(Math.random() * statuses.length);
+      resolve({ job_id: jobId, status: "complete" }); // Force complete for faster preview
+    }, 300);
+  });
 }
