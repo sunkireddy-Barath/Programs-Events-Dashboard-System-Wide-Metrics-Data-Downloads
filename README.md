@@ -6,7 +6,6 @@ Staff Dashboard — Programs & Events Metrics
 
 A high-performance, polished administrative interface designed for Wikimedia Foundation staff. This dashboard provides real-time visibility into global program metrics and enables secure, background-processed data exports for deep analysis. 
 
-Built with a "human-first" philosophy, the repository is 100% manual, neat, and professional.
 
 ---
 
