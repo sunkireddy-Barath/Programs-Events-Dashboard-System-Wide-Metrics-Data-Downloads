@@ -169,4 +169,3 @@ A clean and organized file system designed for easy contribution and audit.
 
 ---
 
-*This project is 100% human-crafted and manual. No AI-style boilerplate or autonomous scripts were involved in the final delivery.*
