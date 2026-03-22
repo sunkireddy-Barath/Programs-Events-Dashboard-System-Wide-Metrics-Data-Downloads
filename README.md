@@ -1,6 +1,8 @@
-Google Summer of Code 2026 Proposal — Wikimedia Foundation
+# Google Summer of Code 2026 Proposal — Wikimedia Foundation
 
-# Staff Dashboard — Programs & Events Metrics
+#Programs & Events Dashbaord System Wide Metrics & Data Download 
+
+Staff Dashboard — Programs & Events Metrics
 
 A high-performance, polished administrative interface designed for Wikimedia Foundation staff. This dashboard provides real-time visibility into global program metrics and enables secure, background-processed data exports for deep analysis. 
 
