@@ -1,78 +1,70 @@
 import React, { useState, useEffect } from 'react';
-import { t } from '../i18n';
-import { fetchMetrics } from '../mockApi';
-import FilterPanel, { initFilters } from './FilterPanel';
-import MetricsCards from './MetricsCards';
-import ChartsSection from './ChartsSection';
-import ExportPanel from './ExportPanel';
-import SystemWorkflow from './SystemWorkflow';
+import './style.css';
+import DashboardFilters from './components/DashboardFilters';
+import MetricsGrid from './components/MetricsGrid';
+import DashboardCharts from './components/DashboardCharts';
+import ExportData from './components/ExportData';
+
+// Mock data directly in the file
+const DATA = {
+  total_programs: 12500,
+  editors: 45000,
+  edits: 18000000,
+  articles: 95000,
+  new_programs: 240,
+  retention: 68.2,
+  by_type: [
+    { name: 'Education', count: 45 },
+    { name: 'Edit-a-thons', count: 25 },
+    { name: 'Contest', count: 15 },
+    { name: 'Other', count: 15 }
+  ],
+  trend: [
+    { month: 'Jan', editors: 42000 }, { month: 'Feb', editors: 43500 },
+    { month: 'Mar', editors: 45000 }, { month: 'Apr', editors: 44200 },
+    { month: 'May', editors: 46000 }, { month: 'Jun', editors: 47500 },
+    { month: 'Jul', editors: 48000 }, { month: 'Aug', editors: 47000 },
+    { month: 'Sep', editors: 49000 }, { month: 'Oct', editors: 51000 },
+    { month: 'Nov', editors: 52500 }, { month: 'Dec', editors: 54000 }
+  ],
+  languages: [
+    { name: 'English', count: 5500 }, { name: 'Hindi', count: 1210 },
+    { name: 'French', count: 960 }, { name: 'Spanish', count: 885 }
+  ]
+};
 
 function StaffDashboard() {
-  const [metrics, setMetrics] = useState(null);
+  const [filters, setFilters] = useState({ start: '2025-01-01', end: '2026-01-01', type: 'All' });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-  const [filters, setFilters] = useState(initFilters);
-  const [lastUpdated, setLastUpdated] = useState('');
-
-  const loadData = (currentFilters) => {
-    setLoading(true);
-    setError(false);
-    fetchMetrics(currentFilters)
-      .then((data) => {
-        setMetrics(data);
-        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        setLastUpdated(time);
-        setLoading(false);
-      })
-      .catch(() => {
-        setError(true);
-        setLoading(false);
-      });
-  };
 
   useEffect(() => {
-    loadData(filters);
-  }, []); // Initial load only
+    // Simulate initial loading
+    setTimeout(() => setLoading(false), 800);
+  }, []);
 
-  const handleApply = (newFilters) => {
-    setFilters(newFilters);
-    loadData(newFilters);
-  };
-
-  const handleReset = (defaultFilters) => {
-    setFilters(defaultFilters);
-    loadData(defaultFilters);
+  const handleApply = (f) => {
+    setFilters(f);
+    setLoading(true);
+    setTimeout(() => setLoading(false), 600);
   };
 
   return (
-    <div className="staff-dashboard">
-      <div className="sd-header">
-        <h1 className="sd-title">{t('page_title')}</h1>
-        <p className="sd-subtitle">{t('page_subtitle')}</p>
-      </div>
+    <div className="dashboard-container">
+      <header className="main-header">
+        <h1>Staff Dashboard</h1>
+        <p>System-wide metrics and data downloads — WMF Staff Only</p>
+      </header>
 
-      <div className="sd-body">
-        <SystemWorkflow />
-        <FilterPanel onApply={handleApply} onReset={handleReset} disabled={loading} />
-        
-        <div className="section metrics-section">
-          <MetricsCards 
-            metrics={metrics} 
-            loading={loading} 
-            error={error} 
-            onRetry={() => loadData(filters)} 
-          />
-          {lastUpdated && !loading && !error && (
-            <div className="metrics-footer">
-              <span className="footer-notice">{t('data_cached_notice')}</span>
-              <span className="footer-timestamp">{t('last_updated_lbl')} {lastUpdated}</span>
-            </div>
-          )}
-        </div>
-
-        <ChartsSection metrics={metrics} loading={loading} error={error} />
-        <ExportPanel filters={filters} />
-      </div>
+      <main className="dashboard-content">
+        <DashboardFilters 
+          filters={filters} 
+          onApply={handleApply} 
+          disabled={loading} 
+        />
+        <MetricsGrid data={DATA} loading={loading} />
+        <DashboardCharts data={DATA} loading={loading} />
+        <ExportData filters={filters} />
+      </main>
     </div>
   );
 }

@@ -1,0 +1,54 @@
+/* Simple, clean, manual CSS for Staff Dashboard */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #fdfdfd; color: #1a1a1a; line-height: 1.6; }
+
+.dashboard-container { max-width: 1200px; margin: 0 auto; padding: 30px; }
+
+.main-header { border-bottom: 2px solid #3a6fa8; padding-bottom: 15px; margin-bottom: 30px; }
+.main-header h1 { color: #3a6fa8; font-size: 28px; }
+.main-header p { color: #555; font-size: 14px; margin-top: 5px; }
+
+.dashboard-content { display: flex; flex-direction: column; gap: 30px; }
+
+.card { background: #fff; border: 1px solid #ddd; padding: 25px; border-radius: 3px; }
+.card h3 { font-size: 16px; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+
+/* Filters */
+.filter-row { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-end; }
+.filter-group { display: flex; flex-direction: column; gap: 8px; }
+.filter-group label { font-size: 13px; font-weight: bold; color: #444; }
+.filter-group input, .filter-group select { padding: 8px 12px; border: 1px solid #ccc; font-size: 14px; }
+.date-inputs { display: flex; gap: 8px; align-items: center; }
+
+.filter-actions { display: flex; gap: 15px; margin-left: auto; align-items: center; }
+
+/* Metrics */
+.metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+@media (max-width: 800px) { .metrics-grid { grid-template-columns: 1fr; } }
+
+.metric-card { background: #fff; border: 1px solid #eee; padding: 20px; display: flex; flex-direction: column; }
+.metric-title { font-size: 12px; font-weight: bold; color: #888; text-transform: uppercase; margin-bottom: 5px; }
+.metric-value { font-size: 30px; font-weight: bold; color: #3a6fa8; }
+.metric-sub { font-size: 12px; color: #aaa; margin-top: 3px; }
+
+.metrics-footer { grid-column: 1 / -1; font-size: 12px; color: #999; text-align: right; border-top: 1px solid #eee; padding-top: 10px; }
+
+/* Charts */
+.charts-container { display: flex; flex-direction: column; gap: 30px; }
+.chart-card { min-height: 350px; }
+
+/* Export */
+.export-workflow-preview { display: flex; gap: 10px; align-items: center; margin: 15px 0; font-weight: bold; font-size: 13px; color: #999; }
+.export-workflow-preview .active { color: #3a6fa8; text-decoration: underline; }
+.export-card p { font-size: 14px; color: #555; margin-bottom: 15px; }
+.limit { font-size: 12px; font-weight: bold; color: #cc0000; margin-top: 10px; }
+
+/* Buttons */
+.btn { padding: 10px 20px; font-size: 14px; font-weight: bold; border: none; cursor: pointer; border-radius: 2px; }
+.primary { background: #3a6fa8; color: #fff; }
+.secondary { background: #eee; color: #333; }
+.btn:disabled { opacity: 0.5; }
+.lg { font-size: 16px; padding: 12px 25px; }
+
+.loading-grid, .loading-charts { padding: 50px; text-align: center; color: #999; font-style: italic; }
